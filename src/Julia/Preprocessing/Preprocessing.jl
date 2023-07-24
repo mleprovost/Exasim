@@ -44,7 +44,7 @@ include("initializemesh.jl");
 include("initializeexasim.jl");
 include("findexec.jl");
 
-function preprocessing(app,mesh)
+function preprocessing(app,mesh; d0::Union{String, Nothing}=nothing)
 
 if app.modelnumber==0
     strn = "";
@@ -82,7 +82,7 @@ if (app.nd==3) && (nve==8)
 end
 app.pgauss = 2*app.porder;
 
-master = Master.mkmaster(app.nd,app.porder,app.pgauss,app.elemtype,app.nodetype);
+master = Master.mkmaster(app.nd,app.porder,app.pgauss,app.elemtype,app.nodetype; d0 = d0);
 writemaster(master,filemaster);
 
 app.boundaryconditions = mesh.boundarycondition;

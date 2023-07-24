@@ -1,8 +1,11 @@
-function genlib(cpucompiler::String, gpucompiler::String, coredir::String, cpulibflags::String="", gpulibflags::String="")
+function genlib(cpucompiler::String, gpucompiler::String, coredir::String, cpulibflags::String="", gpulibflags::String=""; mydir::Union{Nothing, String}=nothing)
 # Examples: genlib("g++","");
 #           genlib("g++","nvcc");
 
-mydir = pwd();
+if mydir == nothing
+    mydir = pwd()
+end
+@show coredir
 cd(coredir);
 
 if length(cpucompiler)>0
@@ -16,7 +19,7 @@ if length(cpucompiler)>0
     run(str);
 
     str = cpucompiler * " -fPIC -O3 -c opuCore.cpp"
-    if length(cpulibflags)
+    if length(cpulibflags) > 0
         str = str * " " * cpulibflags
     end
     run(string2cmd(str));

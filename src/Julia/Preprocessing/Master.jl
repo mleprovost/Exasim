@@ -50,13 +50,13 @@ struct MASTERStruct
     tface::Array{IntP,2}; # face
 end
 
-function mkmaster(dim::IntP,porder::IntP,pgauss::IntP,elemtype::IntP,nodetype::IntP)
+function mkmaster(dim::IntP,porder::IntP,pgauss::IntP,elemtype::IntP,nodetype::IntP; d0::Union{Nothing, String}=nothing)
 
 # node positions on the master element and master face
-xpe,telem,xpf,tface,perm = masternodes(porder,dim,elemtype);
+xpe,telem,xpf,tface,perm = masternodes(porder,dim,elemtype; d0 = d0);
 
 # Gauss points and weights on the master volume element
-gpe, gwe = gaussnodes(pgauss,dim,elemtype);
+gpe, gwe = gaussnodes(pgauss,dim,elemtype, d0 = d0);
 
 # shape functions and derivatives on the master volume element
 shapeg = mkshape(porder,xpe,gpe,elemtype);
@@ -78,7 +78,7 @@ end
 
 if dim>1
     # Gauss points and weights on the master face element
-    gpf, gwf = gaussnodes(pgauss,dim-1,elemtype);
+    gpf, gwf = gaussnodes(pgauss,dim-1,elemtype; d0 = d0);
     # shape functions and derivatives on the master face element
     shapfg = mkshape(porder,xpf,gpf,elemtype);
     shapfn = mkshape(porder,xpf,xpf,elemtype);
@@ -104,8 +104,8 @@ for d=1:dim
     shapfgw[:,:,d] = shapfg[:,:,d]*Mgwf;
 end
 
-xp1d,~,~,~,~ = masternodes(porder,1,elemtype);
-gp1d,gw1d = gaussnodes(pgauss,1,elemtype);
+xp1d,~,~,~,~ = masternodes(porder,1,elemtype; d0 = d0);
+gp1d,gw1d = gaussnodes(pgauss,1,elemtype; d0 = d0);
 shap1dg = mkshape(porder,xp1d,gp1d,elemtype);
 shap1dn = mkshape(porder,xp1d,xp1d,elemtype);
 
@@ -133,8 +133,8 @@ return master;
 
 end
 
-function mkmaster(app)
-    master = mkmaster(app.nd,app.porder,app.pgauss,app.elemtype,app.nodetype);
+function mkmaster(app; d0::Union{Nothing, String}=nothing)
+    master = mkmaster(app.nd,app.porder,app.pgauss,app.elemtype,app.nodetype; d0 = d0)
     return master;
 end
 

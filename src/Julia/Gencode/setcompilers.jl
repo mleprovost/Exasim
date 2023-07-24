@@ -1,4 +1,4 @@
-function setcompilers(app)
+function setcompilers(app; mdir::Union{Nothing, String} = nothing)
 
 cpustatus0 = Sys.which(app.cpucompiler);
 cpustatus1 = Sys.which("g++");
@@ -100,7 +100,9 @@ if app.platform == "gpu"
     end
 end
 
-mdir = pwd();
+if mdir == nothing
+    mdir = pwd()
+end
 ii = findlast(app.codename, mdir);
 coredir = mdir[1:ii[end]] * "/lib";
 

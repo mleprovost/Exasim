@@ -1,6 +1,8 @@
-function masternodes(porder::Int,dim::Int,elemtype::Int)
+function masternodes(porder::Int,dim::Int,elemtype::Int; d0::Union{Nothing, String}=nothing)
 
-d0 = pwd();
+if d0 == nothing
+    d0 = pwd()
+end
 ii = findlast("Exasim", d0);
 
 # filename = string(d0[1:ii[end]],"Preprocessing/masternodes.mat");

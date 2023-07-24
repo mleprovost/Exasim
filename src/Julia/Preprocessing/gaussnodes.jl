@@ -1,7 +1,11 @@
-function gaussnodes(pgauss::Int,dim::Int,elemtype::Int)
+function gaussnodes(pgauss::Int,dim::Int,elemtype::Int; d0::Union{Nothing, String}=nothing)
 
-d0 = pwd();
+if d0 == nothing
+    d0 = pwd()
+end
 ii = findlast("Exasim", d0);
+
+@show ii
 
 # filename = string(d0[1:ii[end]],"Preprocessing/gaussnodes.mat");
 # vars = MAT.matread(filename);
